@@ -1,0 +1,14 @@
+pet_dwh:
+  target: dev
+  outputs:
+    dev:
+      type: spark
+      method: session
+      host: localhost  # unused for method=session, but dbt-spark requires the field
+      # Plain (undotted) schema, resolved against Spark's default catalog,
+      # which is set to "mart" in spark-defaults.conf. dbt's own relation
+      # existence checks (needed for incremental snapshot logic) don't
+      # correctly handle a dotted "<catalog>.<namespace>" schema string,
+      # even though plain SQL generation does - see sources.yml for where
+      # that trick is still safe to use (read-only, no state tracking).
+      schema: shop

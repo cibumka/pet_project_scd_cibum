@@ -13,6 +13,7 @@ venv/
 dbt/pet_dwh/target/
 dbt/pet_dwh/dbt_packages/
 dbt/pet_dwh/logs/
+dbt/pet_dwh/.user.yml
 
 # Env / secrets
 .env

@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: stg_shop
+    # Same unquoted "<catalog>.<namespace>" trick as profiles.yml, so this
+    # resolves to the "stg" Iceberg catalog regardless of the run's target schema.
+    schema: stg.shop
+    tables:
+      - name: products
