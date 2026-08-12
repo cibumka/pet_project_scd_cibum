@@ -1,0 +1,25 @@
+# Airflow runtime
+airflow/logs/
+airflow/plugins/__pycache__/
+airflow/dags/__pycache__/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# dbt
+dbt/pet_dwh/target/
+dbt/pet_dwh/dbt_packages/
+dbt/pet_dwh/logs/
+
+# Env / secrets
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes data (bind-mounted local data, if any)
+data/
