@@ -110,6 +110,35 @@ services:
     networks:
       - etl_net
 
+  spark-iceberg:
+    build:
+      context: ./spark
+    image: pet_project_scd_cibum/spark-iceberg:latest
+    container_name: spark-iceberg
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      AWS_REGION: us-east-1
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB}
+    volumes:
+      - ./spark/jobs:/opt/spark_jobs
+      - ./dbt/pet_dwh:/opt/dbt/pet_dwh
+    # Base image's entrypoint.sh unconditionally starts a standalone Spark
+    # master+worker, history-server, and thrift-server (4 extra JVMs) - we
+    # don't use any of that (spark-submit runs local[*], dbt-spark uses the
+    # "session" method), so bypass it entirely and just keep the container
+    # alive for `docker exec`.
+    entrypoint: ["tail", "-f", "/dev/null"]
+    depends_on:
+      minio:
+        condition: service_healthy
+    restart: always
+    networks:
+      - etl_net
+
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
