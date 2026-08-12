@@ -1,3 +1,11 @@
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='merge',
+        unique_key=['category', 'agg_date'],
+    )
+}}
+
 select
     category,
     current_date() as agg_date,
